@@ -1,5 +1,28 @@
 # Changelog
 
+## v1.4.463 (2026-07-28)
+
+### PR [#2168](https://github.com/danielmiessler/Fabric/pull/2168) by [ksylvan](https://github.com/ksylvan): fix: complete localized setup and error messages for supported locales
+
+- Fix: complete localized setup and error messages across supported locales
+- Translate Bedrock setup prompts across nine supported locales
+- Localize datetime and system template errors consistently
+- Translate Persian Spotify errors and setup guidance
+- Correct Japanese and Polish file operation log labels
+
+## v1.4.462 (2026-07-28)
+
+### PR [#2123](https://github.com/danielmiessler/Fabric/pull/2123) by [ksylvan](https://github.com/ksylvan) and [OdinKral](https://github.com/OdinKral): fix: block path traversal in pattern name lookup
+
+- **Security Fix:** Blocked path traversal attacks in pattern name lookup (closes #2094) — pattern names containing `..` could previously escape the patterns directory and read arbitrary files via `filepath.Join`; a guard has been added at the top of `getFromDB`, an i18n key `pattern_invalid_name` has been added to all 11 locale files, and test cases now cover all common traversal variants.
+- New translations for the "invalid pattern" user-facing string.
+
+## v1.4.461 (2026-07-28)
+
+### PR [#2152](https://github.com/danielmiessler/Fabric/pull/2152) by [AUTHENSOR](https://github.com/AUTHENSOR): fix: shell-escape extension values to prevent command injection
+
+- **Fix:** Shell-escape extension values to prevent command injection in the extension executor, which previously ran commands via `sh -c` with unescaped, user-controlled values interpolated into the command string. All user-controlled values are now wrapped in single quotes with embedded-single-quote escaping prior to interpolation, ensuring the shell treats them as literal arguments. A regression test (`ShellInjectionBlocked`) has been added to verify that malicious input (e.g., `hello; touch /marker`) does not execute unintended shell commands.
+
 ## v1.4.460 (2026-07-24)
 
 ### PR [#2166](https://github.com/danielmiessler/Fabric/pull/2166) by [ksylvan](https://github.com/ksylvan): feat: add Claude Opus 5 support and refresh dependencies
