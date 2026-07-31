@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.4.466 (2026-07-30)
+
+### PR [#2116](https://github.com/danielmiessler/Fabric/pull/2116) by [ksylvan](https://github.com/ksylvan) and [dependabot](https://github.com/apps/dependabot): fix(web): repair the chat page and modernize the build toolchain
+
+- Modernized the web stack by upgrading Tailwind, Skeleton, SvelteKit, Vite, and supporting dependencies.
+- Replaced removed Skeleton components with compatible local implementations to restore UI functionality.
+- Improved pre-stream chat error reporting to prevent duplication of streamed errors, and hardened vendor list parsing to return empty model arrays on malformed input.
+- Fixed stream completion crashes, normalized displayed error messages, corrected toast stacking order, and added warning notification support.
+- Restored linting, formatting, testing, and pnpm override configuration, and preserved custom themes through the Tailwind CSS-based configuration migration.
+
+### PR [#2178](https://github.com/danielmiessler/Fabric/pull/2178) by [OdinKral](https://github.com/OdinKral) and [ksylvan](https://github.com/ksylvan): feat(patterns): add generate_frontmatter for PKM/Obsidian users
+
+- Add `generate_frontmatter` to conversion, extraction, and writing categories
+- Document PKM-ready YAML metadata fields in pattern explanations
+- Register pattern descriptions and extracts for suggestion workflows
+- Credit both contributors in incoming changelog entry
+
 ## v1.4.465 (2026-07-29)
 
 ### PR [#2180](https://github.com/danielmiessler/Fabric/pull/2180) by [ksylvan](https://github.com/ksylvan): fix: include Grok in localized --search help text

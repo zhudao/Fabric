@@ -12,11 +12,10 @@
   import { Textarea } from "$lib/components/ui/textarea";
   import { obsidianSettings } from "$lib/store/obsidian-store";
   import { featureFlags } from "$lib/config/features";
-  import { getDrawerStore } from '@skeletonlabs/skeleton';
+  import { drawerStore } from '$lib/store/drawer-store';
   import { systemPrompt, selectedPatternName } from "$lib/store/pattern-store";
   import { onMount } from "svelte";
 
-  const drawerStore = getDrawerStore();
   function openDrawer() {
     drawerStore.open({});
   }
