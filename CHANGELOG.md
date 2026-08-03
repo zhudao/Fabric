@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.468 (2026-08-02)
+
+### PR [#2182](https://github.com/danielmiessler/Fabric/pull/2182) by [drawliin](https://github.com/drawliin): fix(ollama): close stream channel on errors
+
+- Fix(ollama): close stream channel on errors
+
 ## v1.4.467 (2026-07-31)
 
 ### PR [#2171](https://github.com/danielmiessler/Fabric/pull/2171) by [OdinKral](https://github.com/OdinKral): feat(scripts): add pattern/maintenance audit script
