@@ -46,8 +46,3 @@ peerDependencyRules:
 allowBuilds:
   esbuild: true
   svelte-preprocess: true
-  # A git-hosted package needs the full dependency path as the key, because
-  # pnpm does not trust the identity of a package that has no semver version.
-  # The commit hash must agree with the version in pnpm-lock.yaml. If you move
-  # the "modularize" branch, update this key and the lockfile together.
-  'pdf-to-markdown-core@https://codeload.github.com/jzillmann/pdf-to-markdown/tar.gz/5e930fafd305644cff00a3824030f0d6741acde8': true

@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.4.470 (2026-08-04)
+
+### PR [#2186](https://github.com/danielmiessler/Fabric/pull/2186) by [giodamelio](https://github.com/giodamelio): Update Nixpkgs version for newer Go version
+
+- Updated the Nixpkgs version to provide a Go release that satisfies the `go.mod` requirement of Go >= 1.26.0, as the previously pinned Nixpkgs only shipped Go 1.25.4.
+
+## v1.4.469 (2026-08-03)
+
+### PR [#2185](https://github.com/danielmiessler/Fabric/pull/2185) by [ksylvan](https://github.com/ksylvan): feat(web): replace PDF.js pipeline with pdf-inspector WASM worker
+
+- Replaced the PDF.js processing pipeline with the new `pdf-inspector.worker.ts`, backed by `@firecrawl/pdf-inspector-wasm`. The worker initializes WASM one time and processes transferred ArrayBuffers.
+- Added worker error handling. A worker crash now rejects all pending requests with a clear error and terminates the worker. The next request starts a new worker.
+- Fixed the file attachment behavior. The app now parses each file and stores its content without a chat request. One submit sends exactly one `streamChat` call, not one call for each attached file.
+- Removed the legacy PDF dependency chain: `pdf-to-markdown-core`, `pdfjs-dist`, `pdf-config.ts`, and the related build configuration. `@firecrawl/pdf-inspector-wasm` is now the only PDF dependency.
+- Simplified the worker boundary in follow-up refactors: merged redundant methods, removed dead code, and inlined a single-use interface. The full test suite continued to pass.
+
 ## v1.4.468 (2026-08-02)
 
 ### PR [#2182](https://github.com/danielmiessler/Fabric/pull/2182) by [drawliin](https://github.com/drawliin): fix(ollama): close stream channel on errors

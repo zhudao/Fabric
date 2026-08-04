@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button";
   import { Textarea } from "$lib/components/ui/textarea";
-  import { sendMessage, messageStore } from '$lib/store/chat-store';
+  import { messageStore } from '$lib/store/chat-store';
   import { systemPrompt, selectedPatternName } from '$lib/store/pattern-store';
   import { toastStore } from '$lib/store/toast-store';
   import { Paperclip, Send, FileCheck } from 'lucide-svelte';
@@ -14,6 +14,7 @@
   import { obsidianSettings, updateObsidianSettings } from '$lib/store/obsidian-store';
   import { PdfConversionService } from '$lib/services/PdfConversionService';
   import { formatErrorMessage } from '$lib/utils/error-message';
+  import { readFileContent } from './read-file-content';
   
   const pdfService = new PdfConversionService();
   
@@ -83,6 +84,7 @@
 
   async function handleFileUpload(e: Event) {
   uploadedFiles = []; // Clear uploadedFiles at the beginning
+  isFileIndicatorVisible = false;
   if (!files || files.length === 0) return;
 
   if (uploadedFiles.length >= 5 || (uploadedFiles.length + files.length) > 5) {
@@ -101,9 +103,10 @@
 
     for (let i = 0; i < files.length && uploadedFiles.length < 5; i++) {
       const file = files[i];
-      const content = await readFileContent(file);
+      const content = await readFileContent(file, pdfService, toastStore.warning);
       fileContents.push(content);
       uploadedFiles = [...uploadedFiles, file.name];
+      isFileIndicatorVisible = true;
       
       // Update processing status per file
       messageStore.update(messages => {
@@ -132,104 +135,6 @@
     isProcessingFiles = false;
   }
 }
-
-
-  
-
-
-
-
-async function readFileContent(file: File): Promise<string> {
-  // Log initial file metadata
-  console.log('Reading file:', {
-    name: file.name,
-    type: file.type,
-    size: file.size,
-    lastModified: new Date(file.lastModified).toISOString()
-  });
-
-  // Handle PDF files
-  if (file.type === 'application/pdf') {
-    try {
-      // Start PDF processing
-      console.log('Starting PDF conversion process');
-      const markdown = await pdfService.convertToMarkdown(file);
-      
-      // Validate conversion result
-      console.log('PDF conversion completed:', {
-        resultLength: markdown.length,
-        preview: markdown.substring(0, 100)
-      });
-
-      // Ensure we have valid content
-      if (!markdown || markdown.trim().length === 0) {
-        throw new Error('PDF conversion returned empty content');
-      }
-
-
-      
-      // Add to fileContents for pattern processing
-      fileContents.push(markdown);
-
-      // Prepare enhanced prompt with system instructions
-      const enhancedPrompt = `${$systemPrompt}\nAnalyze and process the provided content according to these instructions.`;
-      
-      // Format final content with proper labeling
-      const finalContent = `${userInput}\n\nFile Contents (PDF):\n${markdown}`;
-      
-      // Process through pattern system
-      await sendMessage(finalContent, enhancedPrompt);
-
-      return markdown;
-
-    } catch (error) {
-  console.error('PDF Conversion error:', {
-    error,
-    fileName: file.name,
-    fileSize: file.size
-  });
-  
-  const errorMessage = error instanceof Error 
-    ? error.message
-    : 'Unknown error during PDF conversion';
-    
-  throw new Error(`Failed to convert PDF ${file.name}: ${errorMessage}`);
-}
-  }
-
-  // Handle text files
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    
-    reader.onload = async (e) => {
-      const content = e.target?.result as string;
-      console.log('Text file processed:', {
-        fileName: file.name,
-        contentLength: content.length,
-        preview: content.substring(0, 100)
-      });
-      // resolve(content);
-      const enhancedPrompt = `${$systemPrompt}\nAnalyze and process the provided content according to these instructions.`;
-      const finalContent = `${userInput}\n\nFile Contents (Text):\n${content}`;
-      await sendMessage(finalContent, enhancedPrompt);
-      resolve(content);
-    };
-    
-    reader.onerror = (e) => {
-      console.error('FileReader error:', {
-        error: reader.error,
-        fileName: file.name
-      });
-      reject(new Error(`Failed to read ${file.name}: ${reader.error?.message}`));
-    };
-
-    // Start reading the file
-    reader.readAsText(file);
-  });
-}
-
-
-
 
 
   async function saveToObsidian(content: string) {
@@ -332,6 +237,7 @@ async function readFileContent(file: File): Promise<string> {
     const contentsForProcessing = [...fileContents];
     uploadedFiles = [];
     fileContents = [];
+    isFileIndicatorVisible = false;
     fileButtonKey = !fileButtonKey;
 
     // If the message contains YouTube URLs, replace them with transcripts
@@ -439,54 +345,6 @@ async function readFileContent(file: File): Promise<string> {
     );
   }
 }
-
-  
-/* async function handleSubmit() {
-  if (!userInput.trim()) return;
-
-  try {
-    console.log('\n=== Submit Handler Start ===');
-    
-    if (isYouTubeURL) {
-      console.log('2a. Starting YouTube flow');
-      await processYouTubeURL(userInput);
-      return;
-    }
-    
-    const enhancedPrompt = fileContents.length > 0 
-      ? `${$systemPrompt}\nAnalyze and process the provided content according to these instructions.`
-      : $systemPrompt;
-    
-    // Hide raw content from display but keep it for processing
-    messageStore.update(messages => [...messages, {
-      role: 'system',
-      content: 'Processing content...',
-      format: 'loading'
-    }]);
-    
-    // Store the user input before clearing it
-    const inputText = userInput;
-    
-    // Construct finalContent BEFORE clearing userInput
-    const finalContent = fileContents.length > 0 
-      ? `${inputText}\n\nFile Contents (${uploadedFiles.map(f => f.endsWith('.pdf') ? 'PDF' : 'Text').join(', ')}):\n${fileContents.join('\n\n---\n\n')}`
-      : inputText;
-    
-    // Now clear the input fields
-    userInput = ""; 
-    uploadedFiles = []; 
-    fileContents = []; 
-    fileButtonKey = !fileButtonKey; 
-     
-    await sendMessage(finalContent, enhancedPrompt);
-    
-  } catch (error) {
-    console.error('Chat submission error:', error);
-  }
-} */
-
- 
-
 
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {

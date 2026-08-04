@@ -17,13 +17,6 @@ export default defineConfig({
   // Tailwind 4 gives a Vite plugin, which replaces the PostCSS setup. It must
   // come before sveltekit() so that it can process the styles in components.
   plugins: [tailwindcss(), sveltekit()],
-  optimizeDeps: {
-    // Vite 8 optimizes dependencies with Rolldown, which supports top-level
-    // await and modern syntax. The `esbuildOptions` block that was here set
-    // `target` and `supported`, and Vite 8 reads neither key. Rolldown needs no
-    // replacement option. `build.target` below keeps the setting for the build.
-    include: ['pdfjs-dist']
-  },
   define: {
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV)

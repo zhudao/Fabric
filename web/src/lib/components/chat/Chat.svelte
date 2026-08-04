@@ -155,7 +155,7 @@
   $: showObsidian = $featureFlags.enableObsidianIntegration;
 </script>
 
-<div class="chat-container flex gap-0 p-2 w-full h-screen">
+<div class="chat-container flex h-full min-h-0 w-full gap-0 p-2">
   <!-- Left Column -->
   <aside class="flex flex-col gap-2 pr-2 left-column" style="width: {leftColumnWidth}%">
     <!-- Dropdowns Group with Model Config -->
