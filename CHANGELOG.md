@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.4.473 (2026-08-29)
+
+### PR [#2203](https://github.com/danielmiessler/Fabric/pull/2203) by [pacocartones](https://github.com/pacocartones) and [ksylvan](https://github.com/ksylvan): fix(web): preserve multi-byte UTF-8 split across SSE chunks in chat stream
+
+- Fix: preserve split UTF-8 characters in streaming responses
+- Decode API response chunks with persistent streaming state
+- Reuse streaming decoder when inspecting chat backend events
+
+## v1.4.472 (2026-08-29)
+
+### PR [#2198](https://github.com/danielmiessler/Fabric/pull/2198) by [cuihuan](https://github.com/cuihuan): feat(providers): add Synthorai as an OpenAI-compatible provider
+
+- Feat(providers): add Synthorai as an OpenAI-compatible provider
+
+### Direct commits
+
+- Chore: delete generate_changelog noise in README.
+
 ## v1.4.471 (2026-08-28)
 
 ### PR [#2200](https://github.com/danielmiessler/Fabric/pull/2200) by [ksylvan](https://github.com/ksylvan): fix: persist Codex OAuth tokens after refresh
