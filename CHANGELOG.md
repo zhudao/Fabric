@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.4.483 (2026-09-26)
+
+### PR [#2229](https://github.com/danielmiessler/Fabric/pull/2229) by [ksylvan](https://github.com/ksylvan): Show provider error details in Codex 401 responses
+
+- Preserved Codex provider details in authentication errors, appending them after the localized login error message.
+- Retained the underlying authentication errors so they can be inspected through unwrapping.
+- Added regression test coverage for Codex 401 provider messages.
+- Removed the unused `calculateFileHash` method from the extension registry, along with its `crypto/sha256`, `encoding/hex`, and `io` imports.
+- Removed the unused `Verify` and `ListExtensions` methods from the extension registry.
+
+## v1.4.482 (2026-09-25)
+
+### PR [#2228](https://github.com/danielmiessler/Fabric/pull/2228) by [ksylvan](https://github.com/ksylvan): refactor: simplify Ollama chat prompt building and error replies
+
+- Refactored Ollama prompt construction to unify message joining using `strings.Builder`.
+- Centralized error handling and responses while preserving streaming and JSON output formats.
+- Added tests covering streaming errors and multiple-message forwarding.
+
 ## v1.4.481 (2026-09-24)
 
 ### PR [#2226](https://github.com/danielmiessler/Fabric/pull/2226) by [ksylvan](https://github.com/ksylvan): feat: add Claude Code provider through the local CLI
