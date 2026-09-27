@@ -1,5 +1,34 @@
 # Changelog
 
+## v1.4.486 (2026-09-27)
+
+### PR [#2147](https://github.com/danielmiessler/Fabric/pull/2147) by [medhwu](https://github.com/medhwu): feat: add Chinese AI vendors, i18n translation fixes, and 5 Chinese patterns
+
+- Added OpenAI-compatible provider support for three Chinese AI vendors: Aliyun DashScope (Tongyi Qianwen), Zhipu AI (bigmodel.cn/GLM), and ByteDance Ark (Doubao).
+- Added test coverage for all three new Chinese AI vendor providers.
+- Improved Chinese (i18n) translation quality by unifying "provider" terminology across 24 entries and correcting residual English text.
+- Introduced five new Chinese-language patterns: article summarization, contract risk review, classical poetry analysis, English-to-Chinese news translation, and code review.
+
+## v1.4.485 (2026-09-27)
+
+### PR [#2169](https://github.com/danielmiessler/Fabric/pull/2169) by [ksylvan](https://github.com/ksylvan): fix(core): route user input to the user message in BuildSession
+
+- Routed user input through user messages in `BuildSession`, ensuring every request ends with a user message for broader model compatibility.
+- Tracked explicit input placeholders instead of automatically appending input to the prompt.
+- Separated system instructions from user input so input is no longer duplicated.
+- Preserved raw mode input, attachment text, and multipart content during message construction.
+- Maintained pattern endpoint responses by appending input when necessary, with new regression tests for message routing and pattern substitution.
+
+## v1.4.484 (2026-09-26)
+
+### PR [#2069](https://github.com/danielmiessler/Fabric/pull/2069) by [1rashiid](https://github.com/1rashiid) and [ksylvan](https://github.com/ksylvan): feat(cli): add --workflow for sequential pattern composition
+
+- Added a `--workflow` flag that chains multiple patterns together from a YAML or JSON file, piping each step's output into the next step's input.
+- Preserved compatibility with existing flags, including `--stream`, `--dry-run`, `-m`/`-V`, `--context`, `--strategy`, and `--language`, while leaving the single-pattern `-p` path untouched.
+- Added pre-flight validation that catches empty steps, missing or repeated patterns, and unknown pattern names before any LLM call is made.
+- Added per-step overrides for input, model, vendor, and variables, with progress and error messages prefixed as `[step N/TOTAL pattern]` on stderr to keep stdout pipe-clean.
+- Added shell completions for `--workflow` in Bash, Zsh, and Fish, including workflow file path suggestions.
+
 ## v1.4.483 (2026-09-26)
 
 ### PR [#2229](https://github.com/danielmiessler/Fabric/pull/2229) by [ksylvan](https://github.com/ksylvan): Show provider error details in Codex 401 responses
