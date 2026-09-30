@@ -1,5 +1,69 @@
 # Changelog
 
+## v1.4.494 (2026-09-29)
+
+### PR [#2212](https://github.com/danielmiessler/Fabric/pull/2212) by [pacocartones](https://github.com/pacocartones): fix(ollama): honor caller context in SendStream and ListModels
+
+- Fixed `SendStream` and `ListModels` in the Ollama vendor to honor the caller's `context.Context` instead of substituting `context.Background()`, so cancellations now propagate to `o.client.Chat` and `o.client.List`.
+- Resolved an issue where disconnecting web clients left Ollama generations running in the SSE server path, wasting compute and leaking in-flight requests (closes #2196).
+- Added a table-driven `httptest` regression test that cancels mid-stream and asserts `SendStream` returns `context.Canceled` promptly without draining the full stream.
+- Simplified the Ollama stream cancellation test coverage, including streamlined streaming responses and server cancellation checks.
+- Replaced manual cancellation error assertions with `require.ErrorIs` checks and removed explicit timeout guards and stream completion tracking.
+
+## v1.4.493 (2026-09-29)
+
+### PR [#2236](https://github.com/danielmiessler/Fabric/pull/2236) by [ksylvan](https://github.com/ksylvan): chore: clarify comments and remove obsolete code examples across backend and web
+
+- Removed redundant comments across Go sources and Svelte components.
+- Clarified documentation for provider authentication, streaming, and model discovery.
+- Documented cache behavior, configuration precedence, and locale fallback rules.
+- Added notes on security safeguards, implementation limitations, and existing test boundaries.
+- Deleted obsolete commented-out code without altering runtime behavior.
+
+## v1.4.492 (2026-09-29)
+
+### PR [#2235](https://github.com/danielmiessler/Fabric/pull/2235) by [ksylvan](https://github.com/ksylvan): fix: honor configured yt-dlp arguments for REST API transcripts
+
+- Fixed the REST API so that configured yt-dlp arguments are honored for transcript requests.
+- Passed flag and configuration arguments through to the YouTube plugin.
+- Applied plugin arguments to both plain and timestamped transcripts.
+- Added server wiring tests to verify yt-dlp argument propagation.
+- Documented configuration support for the REST transcript endpoint.
+
+## v1.4.491 (2026-09-29)
+
+### PR [#2234](https://github.com/danielmiessler/Fabric/pull/2234) by [ksylvan](https://github.com/ksylvan): chore: update web dependencies and refresh npm and pnpm lockfiles
+
+- Upgraded Svelte to 5.57.1 and SvelteKit to 2.70.3.
+- Bumped Vite to 8.3.1 and Vitest to 4.1.11.
+- Updated Skeleton to 5.0.1 and Zag to 1.43.0.
+- Upgraded TypeScript ESLint, Svelte linting, and formatting tools.
+- Refreshed both lockfiles, updated Rolldown bindings, and removed WebAssembly runtime dependencies.
+
+## v1.4.490 (2026-09-29)
+
+### PR [#2106](https://github.com/danielmiessler/Fabric/pull/2106) by [FuturMix](https://github.com/FuturMix): feat: add FuturMix as OpenAI-compatible provider
+
+- Added FuturMix as a new OpenAI-compatible provider.
+- Added a test case covering the FuturMix provider.
+
+## v1.4.489 (2026-09-29)
+
+### PR [#2189](https://github.com/danielmiessler/Fabric/pull/2189) by [dependabot](https://github.com/apps/dependabot): build(deps): bump nanoid from 5.0.9 to 5.1.16 in /web in the npm_and_yarn group across 1 directory
+
+- Bumped `nanoid` from 5.0.9 to 5.1.16 in the `/web` directory as part of the `npm_and_yarn` dependency group, addressing a security-related dependency update.
+- Merged the latest changes from `main` into the Dependabot branch to keep the update in sync with the current codebase.
+
+## v1.4.488 (2026-09-29)
+
+### PR [#2207](https://github.com/danielmiessler/Fabric/pull/2207) by [scottidler](https://github.com/scottidler) and [ksylvan](https://github.com/ksylvan): fix(anthropic): adaptive thinking on Claude 5 + add --maxTokens flag
+
+- Added a `--maxTokens` CLI flag that caps model output tokens, wiring the existing `ChatOptions.MaxTokens` field through to the provider; a value of `0` preserves the vendor default, so existing behavior is unchanged.
+- Fixed Anthropic thinking support on Claude 5 models (`claude-sonnet-5`, `claude-opus-5`, `claude-fable-5`), which rejected the legacy `thinking.type=enabled` plus `budget_tokens` shape and returned HTTP 400 for every `--thinking` value except `off`.
+- Reworked `parseThinking` to select the correct request shape per model: `thinking.type=disabled` for `off`, adaptive thinking with `output_config.effort` for Claude 5, and the legacy enabled/budget shape for older models.
+- Preserved numeric thinking budgets on adaptive models by bucketing them onto the nearest effort level using the same thresholds as the named levels, so `--thinking=2048` and `--thinking=medium` behave consistently.
+- Added `--maxTokens` shell completion support for Bash, Zsh, and Fish, treating it as an option that requires an argument.
+
 ## v1.4.487 (2026-09-14)
 
 ### PR [#2219](https://github.com/danielmiessler/Fabric/pull/2219) by [anandghegde](https://github.com/anandghegde): feat: add --extract and --extract-last to output only a fenced code block
