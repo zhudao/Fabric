@@ -61,6 +61,16 @@ func TestCreateClient(t *testing.T) {
 			exists:   true,
 		},
 		{
+			name:     "Existing provider - llmman",
+			provider: "llmman",
+			exists:   true,
+		},
+		{
+			name:     "Local provider - Apple Foundation Models",
+			provider: "Apple Foundation Models",
+			exists:   true,
+		},
+		{
 			name:     "Non-existent provider",
 			provider: "NonExistent",
 			exists:   false,

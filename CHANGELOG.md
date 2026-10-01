@@ -1,5 +1,31 @@
 # Changelog
 
+## v1.4.497 (2026-10-01)
+
+### PR [#2240](https://github.com/danielmiessler/Fabric/pull/2240) by [ksylvan](https://github.com/ksylvan): feat: add local Apple Foundation Models provider support
+
+- Added support for the local Apple Foundation Models provider.
+- Registered Apple Foundation Models with a local server endpoint.
+- Made API keys optional during provider setup.
+- Explicitly disabled streaming for non-streaming chat completion requests.
+- Documented macOS requirements, license activation, and local server startup.
+
+## v1.4.496 (2026-10-01)
+
+### PR [#2239](https://github.com/danielmiessler/Fabric/pull/2239) by [ksylvan](https://github.com/ksylvan): feat: add llama.cpp support through the LM Studio-compatible client
+
+- Added llama.cpp support through the LM Studio-compatible client, registered with a localhost endpoint and an optional API key.
+- Replaced dots with underscores in environment variable names so dotted plugin names resolve correctly.
+- Added tests covering dotted plugin names to confirm the expected environment prefixes.
+
+## v1.4.495 (2026-09-30)
+
+### PR [#2204](https://github.com/danielmiessler/Fabric/pull/2204) by [ericcurtin](https://github.com/ericcurtin): feat: add llmman to the OpenAI-compatible providers
+
+- Added llmman as an OpenAI-compatible provider, enabling local models distributed as OCI artifacts to be served through an OpenAI-compatible API on port 17434.
+- Implemented the integration with a single `ProviderMap` entry, following the LiteLLM precedent for a localhost `BaseURL` and requiring no special handling.
+- Extended the existing `TestCreateClient` table with a new case covering the llmman provider.
+
 ## v1.4.494 (2026-09-29)
 
 ### PR [#2212](https://github.com/danielmiessler/Fabric/pull/2212) by [pacocartones](https://github.com/pacocartones): fix(ollama): honor caller context in SendStream and ListModels
