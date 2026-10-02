@@ -363,10 +363,13 @@ Fabric supports a wide range of AI providers:
 
 - Abacus
 - AIML
-- Apple Foundation Models (local, macOS 27 or later: run `sudo fm license` once, then `fm serve --port 1976`; no API key)
+- API Route
+- Apple Foundation Models (local, macOS 27 or later: run `sudo fm license` once, then `fm serve --port 1976`; no API key; select it once in `fabric -S` to enable it)
 - Cerebras
+- Cheaper Inference
 - DeepSeek
 - DigitalOcean
+- Eden AI
 - GrokAI
 - Groq
 - Langdock
@@ -374,8 +377,12 @@ Fabric supports a wide range of AI providers:
 - MiniMax
 - Mistral
 - Novita AI
+- OpenCode Go
+- OpenCode Zen
 - OpenRouter
+- OrcaRouter
 - Pzero
+- Requesty
 - SiliconCloud
 - Synthorai
 - Together

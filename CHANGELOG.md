@@ -1,5 +1,69 @@
 # Changelog
 
+## v1.4.505 (2026-10-01)
+
+### PR [#2225](https://github.com/danielmiessler/Fabric/pull/2225) by [aiapienthusiast](https://github.com/aiapienthusiast): feat(providers): add Cheaper Inference as an OpenAI-compatible provider
+
+- Feat(providers): add Cheaper Inference as an OpenAI-compatible provider
+
+## v1.4.504 (2026-10-01)
+
+### PR [#2221](https://github.com/danielmiessler/Fabric/pull/2221) by [jamesf-coder](https://github.com/jamesf-coder) and [ksylvan](https://github.com/ksylvan): feat: add OpenCode Zen and Go vendors with session routing
+
+- Added OpenCode Zen and OpenCode Go vendors with support for session routing.
+- Simplified session ID handling by replacing UUID generation with `crypto/rand.Text` and dropping the UUID dependency.
+- Preserved existing session IDs and gave preference to named sessions.
+- Standardized the User-Agent value for both OpenCode providers to `fabric`.
+- Removed the version detection utilities and their associated tests.
+
+## v1.4.503 (2026-10-01)
+
+### PR [#2218](https://github.com/danielmiessler/Fabric/pull/2218) by [DennyHo0917](https://github.com/DennyHo0917): feat(providers): add API Route as an OpenAI-compatible provider
+
+- Added API Route (https://global.api-route.com/v1) as an OpenAI-compatible AI provider in Fabric.
+- Standardized the provider's brand name to "API Route" across the codebase.
+- Merged the latest changes from `main` into the feature branch.
+
+## v1.4.502 (2026-10-01)
+
+### PR [#2194](https://github.com/danielmiessler/Fabric/pull/2194) by [jperla](https://github.com/jperla): feat: add TrustedRouter as an OpenAI-compatible provider
+
+- Added TrustedRouter as an OpenAI-compatible provider via a single `ProviderMap` entry, which the plugin registry picks up automatically.
+- Mapped the provider name to the `TRUSTEDROUTER_API_KEY` environment variable in `BuildEnvVariable`.
+- Updated the REST configuration handlers with the matching TrustedRouter field alongside the other providers.
+
+## v1.4.501 (2026-10-01)
+
+### PR [#2193](https://github.com/danielmiessler/Fabric/pull/2193) by [Marc-oss-hub](https://github.com/Marc-oss-hub): feat: add OrcaRouter as OpenAI-compatible provider
+
+- Added OrcaRouter as an OpenAI-compatible provider, registered in the ProviderMap with the base URL `https://api.orcarouter.ai/v1`.
+- Updated the README supported-providers list and the cSpell dictionary to include OrcaRouter.
+- Added a matching `TestCreateClient` test case to cover the new provider.
+
+## v1.4.500 (2026-10-01)
+
+### PR [#2165](https://github.com/danielmiessler/Fabric/pull/2165) by [MVS-source](https://github.com/MVS-source): feat: add Eden AI as an OpenAI-compatible provider
+
+- Feat: add Eden AI as an OpenAI-compatible provider
+
+## v1.4.499 (2026-10-01)
+
+### PR [#2163](https://github.com/danielmiessler/Fabric/pull/2163) by [Thibaultjaigu](https://github.com/Thibaultjaigu): Add Requesty as an OpenAI-compatible provider
+
+- Added Requesty as an OpenAI-compatible provider, registered in the provider config with the base URL `https://router.requesty.ai/v1`, mirroring the existing OpenRouter entry.
+- Derived the `REQUESTY_API_KEY` environment variable automatically from the provider name using the existing plugin machinery, consistent with `OPENROUTER_API_KEY`.
+- Documented Requesty in the OpenAI-compatible providers section of the README.
+
+## v1.4.498 (2026-10-01)
+
+### PR [#2241](https://github.com/danielmiessler/Fabric/pull/2241) by [ksylvan](https://github.com/ksylvan): fix: require explicit configuration for optional-key AI providers
+
+- Fixed optional-key AI providers so they now require explicit configuration before activation.
+- Required base URL environment variables for providers that do not need an API key.
+- Preserved existing configuration checks for providers that require an API key.
+- Added tests covering optional-key activation and required-key checks without credentials.
+- Documented Apple Foundation Models activation through `fabric -S`.
+
 ## v1.4.497 (2026-10-01)
 
 ### PR [#2240](https://github.com/danielmiessler/Fabric/pull/2240) by [ksylvan](https://github.com/ksylvan): feat: add local Apple Foundation Models provider support

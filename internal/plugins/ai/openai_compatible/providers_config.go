@@ -15,6 +15,10 @@ import (
 
 const abacusRouteLLMModelsURL = "https://routellm.abacus.ai/api/v0/_listRouteLLMModels"
 
+// openCodeSessionHeader carries a stable per-conversation session ID that
+// OpenCode uses to optimize routing and prompt caching.
+const openCodeSessionHeader = "x-opencode-session"
+
 // ProviderConfig defines the configuration for an OpenAI-compatible API provider
 type ProviderConfig struct {
 	Name                string
@@ -29,6 +33,14 @@ type ProviderConfig struct {
 	// alongside the web search tool when Search is enabled. Non-xAI
 	// providers should leave this false.
 	EnableXSearch bool
+	// SessionHeader, when non-empty, is the request header used to carry a
+	// stable per-conversation session ID. OpenCode, for example, expects
+	// "x-opencode-session" so it can optimize routing and prompt caching.
+	SessionHeader string
+	// UserAgent, when non-empty, overrides the SDK's default User-Agent
+	// header. Providers that ask clients to identify themselves (e.g.
+	// OpenCode) should set this.
+	UserAgent string
 	// ApiKeyOptional makes the API key not required at setup. Local servers
 	// such as Apple's fm serve accept requests without a key.
 	ApiKeyOptional bool
@@ -53,8 +65,21 @@ func NewClient(providerConfig ProviderConfig) *Client {
 	)
 	client.Client.SetWebSearchToolName(providerConfig.WebSearchToolName)
 	client.Client.SetEnableXSearch(providerConfig.EnableXSearch)
+	client.Client.SetSessionHeaderName(providerConfig.SessionHeader)
+	client.Client.SetUserAgent(providerConfig.UserAgent)
 	client.Client.ApiKey.Required = !providerConfig.ApiKeyOptional
 	return client
+}
+
+// IsConfigured reports whether the vendor is ready to use. A provider with an
+// optional API key has no setting that can fail, so it would always count as
+// configured. For those, require the base URL in the environment, which
+// fabric -S writes when the user selects the provider. Ollama uses the same rule.
+func (c *Client) IsConfigured() bool {
+	if c.ApiKey.Required {
+		return c.Client.IsConfigured()
+	}
+	return os.Getenv(c.ApiBaseURL.EnvVariable) != ""
 }
 
 // ListModels overrides the default ListModels to handle different response formats
@@ -212,9 +237,36 @@ func (c *Client) getStaticModels(modelsKey string) ([]string, error) {
 
 // ProviderMap is a map of provider name to ProviderConfig for O(1) lookup
 var ProviderMap = map[string]ProviderConfig{
+	"Abacus": {
+		Name:                "Abacus",
+		BaseURL:             "https://routellm.abacus.ai/v1/",
+		ModelsURL:           "static:abacus",
+		ImplementsResponses: false,
+	},
 	"AIML": {
 		Name:                "AIML",
 		BaseURL:             "https://api.aimlapi.com/v1",
+		ImplementsResponses: false,
+	},
+	"Aliyun DashScope": {
+		Name:                "Aliyun DashScope",
+		BaseURL:             "https://dashscope.aliyuncs.com/compatible-mode/v1",
+		ImplementsResponses: false,
+	},
+	"Apple Foundation Models": {
+		Name:                "Apple Foundation Models",
+		BaseURL:             "http://localhost:1976/v1",
+		ImplementsResponses: false,
+		ApiKeyOptional:      true,
+	},
+	"API Route": {
+		Name:                "API Route",
+		BaseURL:             "https://global.api-route.com/v1",
+		ImplementsResponses: false,
+	},
+	"ByteDance Ark": {
+		Name:                "ByteDance Ark",
+		BaseURL:             "https://ark.cn-beijing.volces.com/api/v3",
 		ImplementsResponses: false,
 	},
 	"Cerebras": {
@@ -222,9 +274,19 @@ var ProviderMap = map[string]ProviderConfig{
 		BaseURL:             "https://api.cerebras.ai/v1",
 		ImplementsResponses: false,
 	},
+	"Cheaper Inference": {
+		Name:                "Cheaper Inference",
+		BaseURL:             "https://api.cheaperinference.com/v1",
+		ImplementsResponses: false,
+	},
 	"DeepSeek": {
 		Name:                "DeepSeek",
 		BaseURL:             "https://api.deepseek.com",
+		ImplementsResponses: false,
+	},
+	"Eden AI": {
+		Name:                "Eden AI",
+		BaseURL:             "https://api.edenai.run/v3",
 		ImplementsResponses: false,
 	},
 	"FuturMix": {
@@ -266,6 +328,11 @@ var ProviderMap = map[string]ProviderConfig{
 		BaseURL:             "http://localhost:17434/v1",
 		ImplementsResponses: false,
 	},
+	"Mammouth": {
+		Name:                "Mammouth",
+		BaseURL:             "https://api.mammouth.ai/v1",
+		ImplementsResponses: false,
+	},
 	"MiniMax": {
 		Name:                "MiniMax",
 		BaseURL:             "https://api.minimax.io/v1",
@@ -282,14 +349,38 @@ var ProviderMap = map[string]ProviderConfig{
 		BaseURL:             "https://api.novita.ai/openai/v1",
 		ImplementsResponses: false,
 	},
+	"OpenCode Go": {
+		Name:                "OpenCode Go",
+		BaseURL:             "https://opencode.ai/zen/go/v1",
+		ImplementsResponses: false,
+		SessionHeader:       openCodeSessionHeader,
+		UserAgent:           "fabric",
+	},
+	"OpenCode Zen": {
+		Name:                "OpenCode Zen",
+		BaseURL:             "https://opencode.ai/zen/v1",
+		ImplementsResponses: false,
+		SessionHeader:       openCodeSessionHeader,
+		UserAgent:           "fabric",
+	},
 	"OpenRouter": {
 		Name:                "OpenRouter",
 		BaseURL:             "https://openrouter.ai/api/v1",
 		ImplementsResponses: false,
 	},
+	"OrcaRouter": {
+		Name:                "OrcaRouter",
+		BaseURL:             "https://api.orcarouter.ai/v1",
+		ImplementsResponses: false,
+	},
 	"Pzero": {
 		Name:                "Pzero",
 		BaseURL:             "https://api.pzero.studio/v1",
+		ImplementsResponses: false,
+	},
+	"Requesty": {
+		Name:                "Requesty",
+		BaseURL:             "https://router.requesty.ai/v1",
 		ImplementsResponses: false,
 	},
 	"SiliconCloud": {
@@ -307,6 +398,11 @@ var ProviderMap = map[string]ProviderConfig{
 		BaseURL:             "https://api.together.xyz/v1",
 		ImplementsResponses: false,
 	},
+	"TrustedRouter": {
+		Name:                "TrustedRouter",
+		BaseURL:             "https://api.trustedrouter.com/v1",
+		ImplementsResponses: false,
+	},
 	"Venice AI": {
 		Name:                "Venice AI",
 		BaseURL:             "https://api.venice.ai/api/v1",
@@ -322,37 +418,10 @@ var ProviderMap = map[string]ProviderConfig{
 		BaseURL:             "https://api.z.ai/api/paas/v4",
 		ImplementsResponses: false,
 	},
-	"Abacus": {
-		Name:                "Abacus",
-		BaseURL:             "https://routellm.abacus.ai/v1/",
-		ModelsURL:           "static:abacus",
-		ImplementsResponses: false,
-	},
-	"Mammouth": {
-		Name:                "Mammouth",
-		BaseURL:             "https://api.mammouth.ai/v1",
-		ImplementsResponses: false,
-	},
-	"Aliyun DashScope": {
-		Name:                "Aliyun DashScope",
-		BaseURL:             "https://dashscope.aliyuncs.com/compatible-mode/v1",
-		ImplementsResponses: false,
-	},
 	"Zhipu AI": {
 		Name:                "Zhipu AI",
 		BaseURL:             "https://open.bigmodel.cn/api/paas/v4",
 		ImplementsResponses: false,
-	},
-	"ByteDance Ark": {
-		Name:                "ByteDance Ark",
-		BaseURL:             "https://ark.cn-beijing.volces.com/api/v3",
-		ImplementsResponses: false,
-	},
-	"Apple Foundation Models": {
-		Name:                "Apple Foundation Models",
-		BaseURL:             "http://localhost:1976/v1",
-		ImplementsResponses: false,
-		ApiKeyOptional:      true,
 	},
 }
 
