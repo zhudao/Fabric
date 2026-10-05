@@ -1,5 +1,58 @@
 # Changelog
 
+## v1.4.511 (2026-10-04)
+
+### PR [#2107](https://github.com/danielmiessler/Fabric/pull/2107) by [johnpippett](https://github.com/johnpippett): Security: fix remote file write and shell injection in template extensions
+
+- Fixed a remote arbitrary file write vulnerability by disabling automatic application of file changes when running in API mode, preventing unsupervised writes triggered through the REST API's `PatternName` input.
+- Replaced the weak `strings.Contains(path, "..")` check in the file manager with proper path containment validation that rejects absolute paths and confirms resolved paths stay within the project root.
+- Hardened the path containment check in `ApplyFileChanges` by using `filepath.Rel`, correctly handling edge cases such as a project root of `/`.
+- Consolidated path validation in `ParseFileChanges` and `ApplyFileChanges` to a single `filepath.IsLocal` call, which rejects absolute paths, empty paths, directory traversal, and Windows reserved names.
+- Added a regression test that fails if the path containment guard is removed.
+
+### PR [#2187](https://github.com/danielmiessler/Fabric/pull/2187) by [moritzschmitz-oviva](https://github.com/moritzschmitz-oviva): feat: add Eisenhower Matrix prioritization pattern
+
+- Added a new Eisenhower Matrix prioritization pattern for task triage and decision-making.
+- Renamed the pattern from `eisenhower` to `eisenhower_matrix` and removed the old pattern directory.
+- Relocated the Eisenhower Matrix pattern into `data/patterns`.
+- Registered the pattern's description and metadata with the BUSINESS, SELF, and STRATEGY tags.
+- Added task classification and a weekly planning extract to the pattern.
+
+## v1.4.510 (2026-10-04)
+
+### PR [#2255](https://github.com/danielmiessler/Fabric/pull/2255) by [ksylvan](https://github.com/ksylvan): fix: SSE streaming fixes (supersedes #2102, #2128, #2213, #2242, #2247)
+
+- Fixed SSE streaming behavior by correcting chat SSE headers and suppressing completion events after errors.
+- Prevented canceled chat requests from blocking stream update delivery.
+- Upgraded the OpenAI SDK to v3.71.1 and refreshed dependency manifests.
+- Restored Azure deployment routing through native SDK endpoint configuration. Chat Completions use deployment-scoped paths; Responses use `/openai/responses` with the deployment name in the `model` field. Azure endpoints must use HTTPS, and credentials do not follow cross-origin redirects.
+- Improved error handling by preserving provider error details, surfacing Claude scanner failures, and keeping streaming Ollama error responses labeled with NDJSON headers.
+
+## v1.4.509 (2026-10-04)
+
+### PR [#2201](https://github.com/danielmiessler/Fabric/pull/2201) by [ghrom](https://github.com/ghrom): feat: refresh Ultimate Law patterns to current doctrine, add judge_ultimate_law
+
+- Add `judge_ultimate_law` pattern: derives ethical verdicts by applying the Ultimate Law framework's executable rulebook stratum by stratum — deny-by-default consent, derivation chains, integrity constraints, and a falsifiability line naming the fact that would flip each verdict.
+- Refresh `ultimate_law_safety` to the framework's current doctrine: the Law quoted verbatim, consent channels, and new Forfeiture and Theft-by-withholding definitions (proportionality measured in kinds of harm; inability is never theft).
+- Refresh `audit_consent` with the consent-channel threshold test (words, conduct carrying intention, agreement, or prior permission — otherwise there is no consent to audit) and doctrine-grounded revocability.
+- Register the new pattern in pattern descriptions and extracts JSON files, categorize it under ANALYSIS and CR THINKING in `suggest_pattern`, and update `pattern_explanations.md` with renumbered entries.
+
+### PR [#2223](https://github.com/danielmiessler/Fabric/pull/2223) by [googio](https://github.com/googio) and [ksylvan](https://github.com/ksylvan): feat: add Serply web search via --serply_search flag
+
+- Added an optional Serply web search plugin (`SERPLY_API_KEY`) exposed through the new `--serply_search` flag, which runs a Google search and appends the results to the chat as markdown alongside the existing Jina `scrape_question` tool. Installations without configuration remain unchanged.
+- Refactored the Serply integration to use a shared HTTP client with a 30-second timeout, removing per-instance client configuration.
+- Simplified Serply request setup and removed the custom Fabric User-Agent header so requests use the default HTTP User-Agent.
+- Documented the `--serply_search` flag in the README and added it to the shell completions.
+- Updated search tests to use the shared HTTP client and dropped the obsolete User-Agent assertion.
+
+### PR [#2253](https://github.com/danielmiessler/Fabric/pull/2253) by [ksylvan](https://github.com/ksylvan): feat: expand pattern suggestions with Chinese workflows
+
+- Added five Chinese-language workflow patterns across the relevant suggestion categories, covering summaries, reviews, translation, and poetry.
+- Introduced deconstructive, rhetorical, and philosophical analytical lenses for text analysis.
+- Documented eight additional patterns in the suggestion catalog, including descriptions, category tags, and prompt extracts.
+- Renumbered subsequent catalog entries to accommodate the eight new additions.
+- Updated the changelog with the entry for this release.
+
 ## v1.4.508 (2026-10-04)
 
 ### PR [#2252](https://github.com/danielmiessler/Fabric/pull/2252) by [ksylvan](https://github.com/ksylvan): feat: add configurable CORS support to REST and Ollama servers

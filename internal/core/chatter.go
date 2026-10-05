@@ -124,7 +124,14 @@ func (o *Chatter) Send(ctx context.Context, request *domain.ChatRequest, opts *d
 				}
 			}
 			if opts.UpdateChan != nil {
-				opts.UpdateChan <- update
+				select {
+				case opts.UpdateChan <- update:
+				case <-ctx.Done():
+					recordFirstStreamError(errChan, ctx.Err())
+					// Do not stop the loop. If nothing reads responseChan,
+					// the vendor goroutine blocks on its next send.
+					continue
+				}
 			}
 			switch update.Type {
 			case domain.StreamTypeContent:
@@ -187,7 +194,9 @@ func (o *Chatter) Send(ctx context.Context, request *domain.ChatRequest, opts *d
 		return
 	}
 
-	if request.PatternName == "create_coding_feature" {
+	// Apply file changes only in CLI mode, where UpdateChan is nil.
+	// API mode streams responses and must not write files without supervision.
+	if request.PatternName == "create_coding_feature" && opts.UpdateChan == nil {
 		summary, fileChanges, parseErr := domain.ParseFileChanges(message)
 		if parseErr != nil {
 			fmt.Printf("%s\n", fmt.Sprintf(i18n.T("chatter_warning_parse_file_changes_failed"), parseErr))
