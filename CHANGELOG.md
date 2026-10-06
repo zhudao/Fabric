@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.4.515 (2026-10-05)
+
+### PR [#2260](https://github.com/danielmiessler/Fabric/pull/2260) by [Felixkw12](https://github.com/Felixkw12): feat: add Opper as an OpenAI-compatible provider
+
+- Added Opper as an OpenAI-compatible provider, registered in the ProviderMap with the base URL `https://api.opper.ai/v3/compat`.
+- Listed Opper in the OpenAI-Compatible Providers section of README.md and README.zh.md.
+- Added a matching `TestCreateClient` test case.
+
+## v1.4.514 (2026-10-05)
+
+### PR [#2082](https://github.com/danielmiessler/Fabric/pull/2082) by [cp89cyber](https://github.com/cp89cyber) and by [ksylvan](https://github.com/ksylvan): Add `--print-prompt` prompt export mode
+
+- Added a new `--print-prompt` flag that renders the composed chat messages and exits without calling a model.
+- Reused the shared message formatting logic so dry-run and prompt export produce consistent output.
+- Added validation, documentation, and tests for the new prompt export mode.
+- Rejected `--print-prompt` when combined with `--workflow`, returning an error consistent with `--dry-run` and `--output-session`.
+- Translated the `--print-prompt` help text and error messages across all 11 non-English locales.
+- Changed the `--dry-run` role headers from lowercase (`user:`, `assistant:`) to capitalized (`User:`, `Assistant:`) to match the prompt export format.
+
+## v1.4.513 (2026-10-05)
+
+### PR [#2258](https://github.com/danielmiessler/Fabric/pull/2258) by [JuampiHernandez](https://github.com/JuampiHernandez): feat: add Firecrawl web search via --firecrawl_search flag
+
+- Feat: add Firecrawl web search via --firecrawl_search flag
+
+## v1.4.512 (2026-10-05)
+
+### PR [#2257](https://github.com/danielmiessler/Fabric/pull/2257) by [ksylvan](https://github.com/ksylvan): feat: add DemonRoute as an OpenAI-compatible AI provider
+
+- Added DemonRoute as an OpenAI-compatible AI provider.
+- Registered DemonRoute with its OpenAI-compatible API base URL.
+- Added DemonRoute to the README’s list of supported AI providers.
+
 ## v1.4.511 (2026-10-04)
 
 ### PR [#2107](https://github.com/danielmiessler/Fabric/pull/2107) by [johnpippett](https://github.com/johnpippett): Security: fix remote file write and shell injection in template extensions

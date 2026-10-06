@@ -284,6 +284,11 @@ var ProviderMap = map[string]ProviderConfig{
 		BaseURL:             "https://api.deepseek.com",
 		ImplementsResponses: false,
 	},
+	"DemonRoute": {
+		Name:                "DemonRoute",
+		BaseURL:             "https://api.demonroute.com/v1",
+		ImplementsResponses: false,
+	},
 	"Eden AI": {
 		Name:                "Eden AI",
 		BaseURL:             "https://api.edenai.run/v3",
@@ -366,6 +371,11 @@ var ProviderMap = map[string]ProviderConfig{
 	"OpenRouter": {
 		Name:                "OpenRouter",
 		BaseURL:             "https://openrouter.ai/api/v1",
+		ImplementsResponses: false,
+	},
+	"Opper": {
+		Name:                "Opper",
+		BaseURL:             "https://api.opper.ai/v3/compat",
 		ImplementsResponses: false,
 	},
 	"OrcaRouter": {
