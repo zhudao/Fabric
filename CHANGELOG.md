@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.4.529 (2026-10-20)
+
+### PR [#2278](https://github.com/danielmiessler/Fabric/pull/2278) by [ksylvan](https://github.com/ksylvan): feat: add OVHcloud as an OpenAI-compatible AI provider
+
+- Added OVHcloud as a new OpenAI-compatible AI provider.
+- Registered OVHcloud with its OpenAI-compatible API endpoint configuration.
+- Disabled Responses API support for the OVHcloud provider.
+- Documented OVHcloud support in the README and changelog.
+
+## v1.4.528 (2026-10-19)
+
+### PR [#2276](https://github.com/danielmiessler/Fabric/pull/2276) by [ksylvan](https://github.com/ksylvan): fix(perplexity): move the Perplexity vendor to the Agent API
+
+- Fixed Perplexity requests that failed with "Sonar is now the Agent API". The vendor now uses the Perplexity Agent API (`/v1/responses`) through the OpenAI client, and the `perplexity-go` dependency is removed.
+- Saved Sonar model names continue to work: `sonar` maps to `perplexity/sonar`, `sonar-pro` to the `fast` preset, and `sonar-reasoning-pro` to the `low` preset. `fabric -L` lists the Agent API models and presets.
+- Perplexity search results show as numbered sources, in streaming and non-streaming modes. The numbers agree with the `[n]` markers in the answer.
+- Fixed streamed Perplexity answers that showed two times.
+
+## v1.4.527 (2026-10-19)
+
+### PR [#2273](https://github.com/danielmiessler/Fabric/pull/2273) by [ksylvan](https://github.com/ksylvan): fix(web): run predev and prebuild scripts on Windows
+
+- Fixed the web `predev` and `prebuild` scripts failing on Windows, where `cmd.exe` lacks the `mkdir -p` and `cp` commands and caused `npm run dev` to abort before Vite started.
+- Replaced the shell commands with Node's `fs.cpSync`, which creates the `static/data` directory when missing and works across all platforms.
+
 ## v1.4.526 (2026-10-18)
 
 ### PR [#2270](https://github.com/danielmiessler/Fabric/pull/2270) by [pcbeingused333](https://github.com/pcbeingused333) and [kaylvan](https://github.com/kaylvan): fix(anthropic): send adaptive thinking and no sampling params to Haiku 5.5, Mythos and Opus 4.7/4.8
