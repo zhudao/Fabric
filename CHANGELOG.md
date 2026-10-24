@@ -1,5 +1,112 @@
 # Changelog
 
+## v1.4.553 (2026-10-23)
+
+### PR [#2306](https://github.com/danielmiessler/Fabric/pull/2306) by [pcbeingused333](https://github.com/pcbeingused333): fix(anthropic): don't send thinking.type=disabled to models that reject it
+
+- Fixed an Anthropic provider issue where `--thinking=off` sent `thinking.type=disabled` to models that reject it (Opus 5.5, Sonnet 5.5, Fable 5/5.1, and the Mythos models), causing 400 errors.
+- Replaced the unsupported setting with `thinking.type=between_tools` for Sonnet 5.5 and adaptive thinking at low effort for models that cannot disable thinking entirely.
+
+## v1.4.552 (2026-10-23)
+
+### PR [#2307](https://github.com/danielmiessler/Fabric/pull/2307) by [StudioPlatforms](https://github.com/StudioPlatforms): feat(providers): add AI Stupid Level as an OpenAI-compatible provider
+
+- Added AI Stupid Level as an OpenAI-compatible provider (vendor `AIStupidLevel`) with base URL `https://aistupidlevel.info/v1`.
+- The API key is read from `AISTUPIDLEVEL_API_KEY`.
+- Added a `TestCreateClient` case for the new provider.
+- Listed AIStupidLevel in the English, Chinese and Arabic READMEs.
+
+## v1.4.551 (2026-10-23)
+
+### PR [#2308](https://github.com/danielmiessler/Fabric/pull/2308) by [ksylvan](https://github.com/ksylvan): fix: honor caller context in AI vendor plugins
+
+- Fixed caller context cancellation handling across all AI providers.
+- Propagated caller contexts through streaming requests for every AI provider.
+- Honored cancellation during model discovery and credential lookup.
+- Passed caller contexts to Abacus model catalog requests.
+- Added regression tests covering cancellation and deadline handling.
+
+## v1.4.550 (2026-10-23)
+
+### PR [#2299](https://github.com/danielmiessler/Fabric/pull/2299) by [ksylvan](https://github.com/ksylvan): fix: protect provider error details and bound response memory usage
+
+- Redacted private provider error details in responses unless debug mode is enabled, preventing sensitive information leaks.
+- Capped non-streaming model responses at 50 MiB and stopped retaining streaming response content in server memory to bound resource usage.
+- Replaced the Ollama SDK with direct HTTP requests and removed the unused Ollama dependencies from the Go and Nix manifests.
+- Added auditing for storage and configuration changes without logging sensitive request bodies.
+- Documented authentication throttling, access scope, limits, and audit events, and added tests covering redaction, auditing, response limits, and compatibility.
+
+## v1.4.549 (2026-10-23)
+
+### PR [#2292](https://github.com/danielmiessler/Fabric/pull/2292) by [pcbeingused333](https://github.com/pcbeingused333) and [ksylvan](https://github.com/ksylvan): fix(openai): return the error of a failed Responses API stream
+
+- Fixed the OpenAI integration so that errors from a failed Responses API stream are properly returned instead of being silently ignored.
+- Simplified error handling in the OpenAI response stream by returning stream errors before processing response failure events.
+- Formatted response failures inline with the associated message and error code for clearer diagnostics.
+- Removed the standalone helper used to format response failure errors, reducing redundant code.
+- Ensured trailing content is emitted only after the stream is confirmed successful.
+
+## v1.4.548 (2026-10-23)
+
+### PR [#2293](https://github.com/danielmiessler/Fabric/pull/2293) by [pcbeingused333](https://github.com/pcbeingused333) and [ksylvan](https://github.com/ksylvan): fix(codex): return the error of a failed Responses stream and report its usage
+
+- Fixed the Codex plugin so that errors from a failed Responses stream are returned to the caller and the associated usage is reported.
+- Returned response failure errors immediately during streaming instead of deferring their handling.
+- Included error codes in failure messages when they are available.
+- Removed the redundant error helper and its fallback message.
+- Added test coverage in `internal/plugins/ai/codex/codex_test.go`.
+
+## v1.4.547 (2026-10-23)
+
+### PR [#2296](https://github.com/danielmiessler/Fabric/pull/2296) by [pcbeingused333](https://github.com/pcbeingused333) and [ksylvan](https://github.com/ksylvan): fix(gemini): return an error when a response is blocked or stopped by a safety filter
+
+- Fixed Gemini streaming responses to return an error when a stream is blocked or stopped by a safety filter.
+- Fixed non-streaming Gemini responses to return an error when the response is blocked.
+- Treated image prohibited-content and image recitation stop reasons as blocked responses.
+
+## v1.4.546 (2026-10-23)
+
+### PR [#2288](https://github.com/danielmiessler/Fabric/pull/2288) by [pcbeingused333](https://github.com/pcbeingused333) and [ksylvan](https://github.com/ksylvan): fix(server): lock out a client after repeated wrong API keys
+
+- Added rate limiting that locks out a client address for one minute after 10 invalid API keys within a minute, returning HTTP 429 with a `Retry-After` header for all subsequent requests, including those with a valid key.
+- Excluded requests with missing API keys from the failure count, since they are not treated as guesses.
+- Bounded the table of tracked clients to prevent unlimited memory growth.
+- Improved pruning of authentication failures by removing all unlocked clients while preserving active lockouts.
+- Simplified the authentication limit tests with directly controlled clock values and numeric client identifiers.
+
+## v1.4.545 (2026-10-23)
+
+### PR [#2287](https://github.com/danielmiessler/Fabric/pull/2287) by [pcbeingused333](https://github.com/pcbeingused333): fix(fsdb): make existing session and context folders and files private
+
+- Fixed session and context storage permissions so that configuration now strips group and other permission bits from the sessions and contexts folders, as well as the files within them.
+- Addressed a privacy issue in which histories saved by earlier versions with 0755 and 0644 modes remained readable by other users, since Save preserves the mode of an existing file.
+- Ensured permissions are never widened and that symlinks are left untouched during the update.
+
+## v1.4.544 (2026-10-23)
+
+### PR [#2295](https://github.com/danielmiessler/Fabric/pull/2295) by [ricardasbitinas-jpg](https://github.com/ricardasbitinas-jpg): feat(providers): add Hostinger Router as an OpenAI-compatible provider
+
+- Added Hostinger Router as an OpenAI-compatible provider with base URL `https://router.hostinger.com/v1`.
+- The API key is read from `HOSTINGER_ROUTER_API_KEY`.
+- Added a `TestCreateClient` case for the new provider.
+- Listed Hostinger Router in the English, Chinese and Arabic READMEs.
+
+## v1.4.543 (2026-10-23)
+
+### PR [#2297](https://github.com/danielmiessler/Fabric/pull/2297) by [pcbeingused333](https://github.com/pcbeingused333) and [ksylvan](https://github.com/ksylvan): fix(claude): omit temperature and top_p for Claude models that reject them on Bedrock gateway and Vertex AI
+
+- Fixed Claude requests by omitting `temperature` and `top_p` for models that reject them on the Bedrock gateway and Vertex AI.
+- Centralized Claude sampling parameter logic so it is shared across the Anthropic and Vertex AI integrations.
+- Preserved per-model restrictions and the mutually exclusive handling of sampling parameters.
+- Moved sampling tests into the shared Anthropic package for consistent coverage.
+- Added the corresponding changelog entry for this change.
+
+## v1.4.542 (2026-10-23)
+
+### PR [#2298](https://github.com/danielmiessler/Fabric/pull/2298) by [pcbeingused333](https://github.com/pcbeingused333): fix: drop retired Bedrock and Vertex AI models from the Azure AI Gateway lists
+
+- Removed retired Bedrock and Vertex AI models from the Azure AI Gateway model lists.
+
 ## v1.4.541 (2026-10-22)
 
 ### PR [#2286](https://github.com/danielmiessler/Fabric/pull/2286) by [pcbeingused333](https://github.com/pcbeingused333) and [ksyvan](https://github.com/ksyvan): fix(server): log request values quoted and upstream error bodies cut
