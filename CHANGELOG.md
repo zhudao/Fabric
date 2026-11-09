@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.4.567 (2026-11-08)
+
+### PR [#2336](https://github.com/danielmiessler/Fabric/pull/2336) by [henrikdukefoss](https://github.com/henrikdukefoss): feat(providers): add StandardCompute as an OpenAI-compatible provider
+
+- Added StandardCompute as an OpenAI-compatible provider, including a new ProviderMap entry with the base URL `https://api.stdcmpt.com/v1` and authentication via the `STANDARDCOMPUTE_API_KEY` environment variable.
+- Added a `TestCreateClient` test case covering the new StandardCompute provider.
+- Updated the README provider list to document StandardCompute.
+
+## v1.4.566 (2026-11-08)
+
+### PR [#2333](https://github.com/danielmiessler/Fabric/pull/2333) by [bigconnect](https://github.com/bigconnect): feat(providers): add llm.buzz as OpenAI-compatible provider
+
+- Feat(providers): add llm.buzz as OpenAI-compatible provider
+
+## v1.4.565 (2026-11-04)
+
+### PR [#2332](https://github.com/danielmiessler/Fabric/pull/2332) by [PSA-Team-source](https://github.com/PSA-Team-source): feat(providers): add UberLLM as an OpenAI-compatible provider
+
+- Added UberLLM as an OpenAI-compatible provider, with a new ProviderMap entry using the base URL `https://api.uberllm.dev/v1` and authentication via the `UBERLLM_API_KEY` environment variable.
+- Added a `TestCreateClient` test case covering the new UberLLM provider.
+- Updated the provider lists in README.md, README.zh.md and README.ar.md.
+
 ## v1.4.564 (2026-11-03)
 
 ### PR [#2322](https://github.com/danielmiessler/Fabric/pull/2322) by [tonydavis629](https://github.com/tonydavis629): feat: add Obscurify AI as an OpenAI-compatible provider
