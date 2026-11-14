@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.4.575 (2026-11-13)
+
+### PR [#2340](https://github.com/danielmiessler/Fabric/pull/2340) by [Rutvij97](https://github.com/Rutvij97): feat: add create_investigation_visualization_mermaid pattern
+
+- Added the `create_investigation_visualization_mermaid` pattern, a Mermaid-based variant of `create_investigation_visualization` that renders investigation graphs natively in GitHub, GitLab, Obsidian, and other Markdown viewers without requiring a Graphviz toolchain.
+- Registered the new pattern in `pattern_explanations`, `suggest_pattern`, and the pattern description and extract indexes. (Closes #322)
+
+### PR [#2341](https://github.com/danielmiessler/Fabric/pull/2341) by [gabsferreira](https://github.com/gabsferreira): feat: add SearchApi Google search via --searchapi_search flag
+
+- Added an optional SearchApi Google search plugin (`SEARCHAPI_API_KEY`) exposed through the new `--searchapi_search` flag, which runs a Google search and appends the organic results to the chat as markdown, alongside the existing `--serply_search` and `--firecrawl_search` tools. Installations without a key remain unchanged.
+- Wired the plugin into the setup wizard's optional configuration group, the plugin registry and the `.env` writer, with help and error strings in all 14 locales.
+- Documented the `--searchapi_search` flag in the README and added it to the bash, zsh and fish completions.
+- Added unit tests covering the Bearer authentication header, request parameters, markdown output and the API error path.
+
+## v1.4.574 (2026-11-13)
+
+### PR [#2335](https://github.com/danielmiessler/Fabric/pull/2335) by [yusufgurdogan](https://github.com/yusufgurdogan): feat: add Sofya web search via --sofya_search flag
+
+- Feat: add Sofya web search via --sofya_search flag
+
+## v1.4.573 (2026-11-13)
+
+### PR [#2330](https://github.com/danielmiessler/Fabric/pull/2330) by [KGKallasmaa](https://github.com/KGKallasmaa) and [ksylvan](https://github.com/ksylvan): feat: add --keenable_search web search (no API key required)
+
+- Add `--keenable_search` flag to search the web with Keenable and send results to chat
+- Use Keenable public endpoint without a key; optional API key switches to the keyed endpoint
+- Add i18n strings for all locales, README help, and shell completions
+
+## v1.4.572 (2026-11-13)
+
+### PR [#2313](https://github.com/danielmiessler/Fabric/pull/2313) by [pcbeingused333](https://github.com/pcbeingused333): fix(bedrock): omit temperature for Claude models that reject it
+
+- Fixed Bedrock integration to omit the temperature parameter for Claude models that reject it, including on the Send path.
+- Replaced `ModelDisallowsSamplingParams` with `ModelAcceptsSamplingParams`, limiting the allowlist to older Claude models.
+- Restricted the sampling-parameter skip to model IDs containing `anthropic.claude`, so Nova, Llama, and Mistral models retain temperature support.
+- Extended `TestSampling_KeptForOtherModels` to cover `us.amazon.nova-pro-v1:0`.
+
 ## v1.4.571 (2026-11-13)
 
 ### PR [#2342](https://github.com/danielmiessler/Fabric/pull/2342) by [weare-linkrra](https://github.com/weare-linkrra): feat(providers): add Synap as an OpenAI-compatible provider
