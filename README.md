@@ -383,6 +383,7 @@ Fabric supports a wide range of AI providers:
 - Langdock
 - LiteLLM
 - llm.buzz
+- LLMTR
 - MiniMax
 - Mistral
 - Novita AI
@@ -402,7 +403,7 @@ Fabric supports a wide range of AI providers:
 - Synthorai
 - TeamoRouter
 - Together
-- UberLLM
+- MartLLM
 - Venice AI
 - Wiro
 - WorldRouter

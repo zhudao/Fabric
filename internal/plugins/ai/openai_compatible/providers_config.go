@@ -377,6 +377,11 @@ var ProviderMap = map[string]ProviderConfig{
 		BaseURL:             "http://localhost:17434/v1",
 		ImplementsResponses: false,
 	},
+	"LLMTR": {
+		Name:                "LLMTR",
+		BaseURL:             "https://llmtr.com/v1",
+		ImplementsResponses: false,
+	},
 	"Mammouth": {
 		Name:                "Mammouth",
 		BaseURL:             "https://api.mammouth.ai/v1",
@@ -497,9 +502,9 @@ var ProviderMap = map[string]ProviderConfig{
 		BaseURL:             "https://api.trustedrouter.com/v1",
 		ImplementsResponses: false,
 	},
-	"UberLLM": {
-		Name:                "UberLLM",
-		BaseURL:             "https://api.uberllm.dev/v1",
+	"MartLLM": {
+		Name:                "MartLLM",
+		BaseURL:             "https://api.martllm.com/v1",
 		ImplementsResponses: false,
 	},
 	"Venice AI": {

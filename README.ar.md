@@ -315,6 +315,7 @@ go install github.com/danielmiessler/fabric/cmd/fabric@latest
 - Langdock
 - LiteLLM
 - llm.buzz
+- LLMTR
 - MiniMax
 - Mistral
 - Novita AI
@@ -331,7 +332,7 @@ go install github.com/danielmiessler/fabric/cmd/fabric@latest
 - Synthorai
 - TeamoRouter
 - Together
-- UberLLM
+- MartLLM
 - Venice AI
 - Wiro
 - WorldRouter
